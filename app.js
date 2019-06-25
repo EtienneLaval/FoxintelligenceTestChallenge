@@ -1,22 +1,15 @@
 const puppeteer = require('puppeteer')
-let dateFormat = require('date-and-time');
+let dateFormat = require('date-and-time')
 const fs = require("fs")
-const globalInstruction = JSON.parse(fs.readFileSync("instruction.json"));
-response = { 'status': 'OK' }
+const globalInstruction = JSON.parse(fs.readFileSync("instruction.json"))
+response = { 'status': 'ok' }
 
 const browseInstruction = async (instruction, element, responseObject, responseKey, repeat) => {
-    // let res = {}
-    // if ("repeat" in instruction){
-
-    // }else{
-
-    // }
     instruction = Object.assign({}, instruction)
-    console.log('repeat at ' + responseKey + ': ' + repeat);
+    console.log('repeat at ' + responseKey + ': ' + repeat)
 
 
     let res = {}
-    let mergerepeatedNeeded = false
     let endSubRepeat = false
     if ("__repeat" in instruction) {
         if (!repeat) { repeat = [] }
@@ -34,18 +27,15 @@ const browseInstruction = async (instruction, element, responseObject, responseK
                         res[__name] = [] 
                         __content = __content[0] 
                     }
-                    // await browseInstruction(instruction[key][0], element, res[key], 0, repeat ? Array.from(repeat) : undefined)
                     await browseInstruction(__content, element, res[__name], __name, repeat ? Array.from(repeat) : undefined)
                 }
             } else if ("xpath" in instruction[key]) {
-                // res[key] = await searchWithInstruction(instruction[key], element, repeat)
                 let searchedSubElement = await searchWithInstruction(instruction[key], element, repeat)
                 if (!searchedSubElement.length > 0) {
                     endSubRepeat = true
                 } else {
                     res[key] = await treatSearchedElement(searchedSubElement, instruction[key],repeat)
                 }
-                // if ("repeatedIn" in instruction[key]) { mergerepeatedNeeded = true }
             } else {
                 if (Array.isArray(instruction[key])) {
                     if (!res[key]) { res[key] = [] }
@@ -67,9 +57,7 @@ const browseInstruction = async (instruction, element, responseObject, responseK
                 console.log('----')
             }
         } else {
-            // responseObject[responseKey] = res
             console.log(res)
-            // if(mergerepeatedNeeded) {res = objectOfArrayToArrayOfObject(res)}
             Array.isArray(responseObject) ? responseObject.push(res) : responseObject[responseKey] = res
             console.log('----')
         }
@@ -81,7 +69,6 @@ const searchWithInstruction = async (subInstruction, element, repeat) => {
     if (subInstruction.repeatedIn) {
         return await searchWhenMultipleTarget(subInstruction, element, repeat)
     } else {
-        // return await searchWhenSingleTarget (subInstruction, element)
         return await element.$x(subInstruction.xpath)
     }
 
@@ -94,8 +81,7 @@ const searchWhenMultipleTarget = async (subInstruction, element, repeat) => {
         repeatedSequence = '(' + repeatedSequence + repeatedIn[i] + '[' + repeat[i] + '])'
     }
     let newXpath = repeatedSequence + xpath
-    console.log(newXpath);
-    // return await element.$x(newXpath)
+    console.log(newXpath)
     let res =  await element.$x(newXpath)
     return res
 
@@ -119,19 +105,20 @@ const treatSearchedElement = async (searchedElement, subInstruction, repeat) => 
         let date = dateFormat.parse(searchedText,format.from)
         searchedText = dateFormat.format(date,format.to)
     }
+    if ("type" in subInstruction && subInstruction.type == "float") {
+        searchedText = parseFloat(searchedText)
+    }
+    if ("contentCondition" in subInstruction) {
+        const contentCondition = subInstruction.contentCondition
+        searchedText = searchedText.includes(contentCondition[0])?contentCondition[1]:contentCondition[2]
+    }
     return searchedText
 }
-// const selectBetween = async (first, last, element) => {
-//     let previousSibling = '( (' + first + ') /preceding-sibling :: *[1])[1]'
-//     let selectAfter =  '(' + previousSibling + ')/sibling::*'
-//     // return selectAfter
-//     return await element.$x(last)
-// }
 
 const main = async () => {
     const browser = await puppeteer.launch()
 
-    // try {
+    try {
     const page = await browser.newPage()
     await page.goto('file:///' + process.cwd() + '/test.html')
     response.result = { 'trips': {}, 'custom': {} }
@@ -139,22 +126,18 @@ const main = async () => {
     await browser.close()
 
 
-    // } catch (error) {
-    //     await browser.close()
-    //     response = { 'status': 'ERR', "error": error.stack }
-    // }
-    await console.log(JSON.stringify(response))
-    // await console.log(JSON.stringify(response.result.trips[0].details.roundTrips))
+    } catch (error) {
+        await browser.close()
+        response = { 'status': 'ERR', "error": error.stack }
+    }
+    const humanReadableResult = JSON.stringify(response, null, 2)
+    await console.log(humanReadableResult)
+    fs.writeFile("response.json", humanReadableResult, function(err) {
+        if(err) {
+            return console.log(err)
+        }
+        console.log("The result was stored in response.json file !")
+    })
 }
 
 main()
-
-
-
-
-// added to instr 
-// "repeatedElements":[
-//     "//table[descendant::td[contains(@class,\"product-travel-date\")]] [not(descendant::h1) ]",
-//     "//table[contains(@class,\"product-details\")]",
-//     "//table[contains(@class,\"passengers\")]"
-// ],

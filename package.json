@@ -6,6 +6,9 @@
   "scripts": {
     "start": "nodemon"
   },
+  "nodemonConfig": {
+    "ignore": ["response.json"]
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",

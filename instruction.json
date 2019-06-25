@@ -12,10 +12,15 @@
                     "xpath": "(//*[contains(@class,\"total\")][contains(text(),\"TOTAL\")]/following-sibling::td)[1]/text()",
                     "replace": [
                         [
-                            "€",
+                            ",*0{1,2}.€",
                             ""
+                        ],
+                        [
+                            ",",
+                            "."
                         ]
-                    ]
+                    ],
+                    "type": "float"
                 },
                 "roundTrips": [
                     {
@@ -37,7 +42,7 @@
                             ],
                             "dateReformat": {
                                 "from": "DD/MM/YYYY",
-                                "to": "YYYY-MM-DD H:mm:ss[Z]"
+                                "to": "YYYY-MM-DD HH:mm:ss.mmm[Z]"
                             }
                         },
                         "trains": [
@@ -48,7 +53,13 @@
                                         "//table[contains(@class,\"product-details\")]",
                                         ""
                                     ],
-                                    "xpath": "//*[contains(@class,\"origin-destination-hour\")]"
+                                    "xpath": "//*[contains(@class,\"origin-destination-hour\")]",
+                                    "replace": [
+                                        [
+                                            "h",
+                                            ":"
+                                        ]
+                                    ]
                                 },
                                 "departureStation": {
                                     "repeatedIn": [
@@ -62,14 +73,20 @@
                                         "//table[contains(@class,\"product-details\")]",
                                         ""
                                     ],
-                                    "xpath": "//*[contains(@class,\"origin-destination-border\")]"
+                                    "xpath": "//*[contains(@class,\"origin-destination-border\")]",
+                                    "replace": [
+                                        [
+                                            "h",
+                                            ":"
+                                        ]
+                                    ]
                                 },
                                 "arrivalStation": {
                                     "repeatedIn": [
                                         "//table[contains(@class,\"product-details\")]",
                                         ""
                                     ],
-                                    "xpath": "//*[contains(@class,\"origin-destination-border\")]"
+                                    "xpath": "//*[contains(@class,\"origin-destination-border\")][2]"
                                 },
                                 "type": {
                                     "repeatedIn": [
@@ -92,6 +109,25 @@
                                         {
                                             "__repeat": true,
                                             "type": {
+                                                "repeatedIn": [
+                                                    "//table[contains(@class,\"passengers\")]",
+                                                    "",
+                                                    "//tr[td[contains(@class,\"typology\")]]"
+                                                ],
+                                                "xpath": "//td[contains(@class,\"fare-details\")]",
+                                                "replace": [
+                                                    [
+                                                        "[\\d]e.passager",
+                                                        ""
+                                                    ]
+                                                ],
+                                                "contentCondition" : [
+                                                    "Billet échangeable",
+                                                    "éghangeable",
+                                                    "non éghangeable"
+                                                ]
+                                            },
+                                            "age": {
                                                 "repeatedIn": [
                                                     "//table[contains(@class,\"passengers\")]",
                                                     "",
@@ -126,10 +162,15 @@
                     "xpath": "//td[last()]",
                     "replace": [
                         [
-                            "€",
+                            ",*0{1,2}.€",
                             ""
+                        ],
+                        [
+                            ",",
+                            "."
                         ]
-                    ]
+                    ],
+                    "type": "float"
                 }
             }
         ]
