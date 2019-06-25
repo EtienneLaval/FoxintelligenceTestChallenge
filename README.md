@@ -9,7 +9,7 @@ pour lancer :
 
 pour lancer les tests:  
 
-`$> npm start`
+`$> npm test`
 
 ## Démarche : 
 

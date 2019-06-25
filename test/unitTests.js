@@ -1,9 +1,8 @@
 const chai = require('chai')
 const should = chai.should()
-// const puppeteer = require('puppeteer')
-// const fs = require("fs")
 const instructonBrowser = require('../browser')
 const textParser = require('../textParser')
+const {FakeDom, instructions} = require('./helper')
 
 // const global = {}
 
@@ -95,20 +94,15 @@ describe('textParsers', async () => {
 	})
 
 })
-describe('browser', async () => {
-	// before (async ()=>{
-	//     global.browser = await puppeteer.launch()
-	// 	global.page = await global.browser.newPage()
-	// 	console.log(process.cwd());
 
-	//     await global.page.goto('file:///' + process.cwd() + '/test/test.html')
-	// })
-	// after (async() => {
-	//     global.browser.close()
-	// })
+describe('browser', async () => {
 	// describe('handleTreatment', async () => {
 
-	// 	it('should process regexp using last param', async () => {
-	// 	})
-	// })
+	it('should browse instructions', async () => {
+		let res = {'result':{}}
+		await instructonBrowser.browseInstruction(instructions,new FakeDom(),res,'result',[])
+		JSON.stringify(res).should.equal('{"result":{"a":[{"b":"b","c":{"d":"d","e":[{"f":"(f[1])f"},{"f":"(f[2])f"},{"f":"(f[3])f"},{"f":"(f[4])f","g":[{"g":"(g[4])g"}]},{"f":"(f[5])f"}]}}]}}')
+	})
 })
+
+
