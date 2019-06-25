@@ -14,7 +14,6 @@
   "license": "ISC",
   "dependencies": {
     "date-and-time": "^0.7.0",
-    "dateformat": "^3.0.3",
     "nodemon": "^1.19.1",
     "puppeteer": "^1.18.0"
   }

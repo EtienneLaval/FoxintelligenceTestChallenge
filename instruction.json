@@ -123,8 +123,8 @@
                                                 ],
                                                 "contentCondition" : [
                                                     "Billet échangeable",
-                                                    "éghangeable",
-                                                    "non éghangeable"
+                                                    "échangeable",
+                                                    "non échangeable"
                                                 ]
                                             },
                                             "age": {
