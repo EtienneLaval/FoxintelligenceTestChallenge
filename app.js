@@ -1,5 +1,4 @@
 const puppeteer = require('puppeteer')
-// const dateFormat = require('date-and-time')
 const fs = require("fs")
 const instructonBrowser = require('./browser')
 

@@ -25,7 +25,7 @@ En suite j'ai essayé de créer un système d'instruction (cf instruction.json) 
 
 
 ## Nota bene :
-Il me semble qu'il y a un souci dans le json demandé, en effet, lors du dernier retour, 4 passagés de 26 à 59 ans sont référencés alors que dans le html, seuls 2 sont de cette tranche d'age lorsque les 2 autres sont de jeunes enfants. J'ai donc ris la liberté de modifier le fichier attendu.
+Il me semble qu'il y a un souci dans le json demandé, en effet, lors du dernier retour, 4 passagers de 26 à 59 ans sont référencés alors que dans le html, seuls 2 sont de cette tranche d'age lorsque les 2 autres sont de jeunes enfants. J'ai donc pris la liberté de modifier le fichier attendu.
 
 ## Consignes
 
