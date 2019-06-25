@@ -1,0 +1,87 @@
+{
+    "trips": [
+        {
+            "code": {
+                "xpath": "(//*[contains(@class,\"pnr-ref\")][contains(text(),\"Référence\")])[last()]/span/text()"
+            },
+            "name": {
+                "xpath": "(//*[contains(@class,\"pnr-name\")][contains(text(),\"associé\")])[last()]/span/text()"
+            },
+            "details": {
+                "price": {
+                    "xpath": "(//*[contains(@class,\"total\")][contains(text(),\"TOTAL\")]/following-sibling::td)[1]/text()",
+                    "replace": [
+                        [
+                            "€",
+                            ""
+                        ]
+                    ]
+                },
+                "roundTrips": [
+                    {
+                        "repeat": true,
+                        "type": {
+                            "repeatedIn": [
+                                "//table[contains(@class,\"product-details\")]"
+                            ],
+                            "xpath": "*[contains(@class,\"travel-way\")]"
+                        },
+                        "date": {
+                            "repeatedIn": [
+                                "//td[contains(@class,\"product-travel-date\")]"
+                            ],
+                            "xpath": "text()"
+                        },
+                        "trains": [
+                            {
+                                "repeat": true,
+                                "departureTime": {
+                                    "repeatedIn": [
+                                        "//table[contains(@class,\"product-details\")]",
+                                        ""
+                                    ],
+                                    "xpath": "*[contains(@class,\"origin-destination-hour\")]"
+                                },
+                                "departureStation": {
+                                    "repeatedIn": [
+                                        "//table[contains(@class,\"product-details\")]",
+                                        ""
+                                    ],
+                                    "xpath": "*[contains(@class,\"origin-destination-station\")]"
+                                },
+                                "arrivalTime": {
+                                    "repeatedIn": [
+                                        "//table[contains(@class,\"product-details\")]",
+                                        ""
+                                    ],
+                                    "xpath": "*[contains(@class,\"origin-destination-border\")]"
+                                },
+                                "arrivalStation": {
+                                    "repeatedIn": [
+                                        "//table[contains(@class,\"product-details\")]",
+                                        ""
+                                    ],
+                                    "xpath": "*[contains(@class,\"origin-destination-border\")]"
+                                },
+                                "type": {
+                                    "repeatedIn": [
+                                        "//table[contains(@class,\"product-details\")]",
+                                        ""
+                                    ],
+                                    "xpath": "*[contains(@class,\"segment\")][1]"
+                                },
+                                "number": {
+                                    "repeatedIn": [
+                                        "//table[contains(@class,\"product-details\")]",
+                                        ""
+                                    ],
+                                    "xpath": "*[contains(@class,\"segment\")][2]"
+                                }
+                            }
+                        ]
+                    }
+                ]
+            }
+        }
+    ]
+}

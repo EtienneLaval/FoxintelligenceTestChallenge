@@ -1,0 +1,137 @@
+{
+    "trips": [
+        {
+            "code": {
+                "xpath": "(//*[contains(@class,\"pnr-ref\")][contains(text(),\"Référence\")])[last()]/span/text()"
+            },
+            "name": {
+                "xpath": "(//*[contains(@class,\"pnr-name\")][contains(text(),\"associé\")])[last()]/span/text()"
+            },
+            "details": {
+                "price": {
+                    "xpath": "(//*[contains(@class,\"total\")][contains(text(),\"TOTAL\")]/following-sibling::td)[1]/text()",
+                    "replace": [
+                        [
+                            "€",
+                            ""
+                        ]
+                    ]
+                },
+                "roundTrips": [
+                    {
+                        "__repeat": true,
+                        "type": {
+                            "repeatedIn": [
+                                "//table[contains(@class,\"product-details\")]"
+                            ],
+                            "xpath": "//*[contains(@class,\"travel-way\")]"
+                        },
+                        "date": {
+                            "repeatedIn": [
+                                "(//td[contains(text(),'Référence') or contains(text(),'associé')])"
+                            ],
+                            "xpath": "/../..//td[contains(@class,'pnr-summary')]",
+                            "treatment": [
+                                "(\\d){2}\/(\\d){2}\/(\\d){4}",
+                                "(repeat[repeat.length-1]-1)%2"
+                            ],
+                            "dateReformat": {
+                                "from": "DD/MM/YYYY",
+                                "to": "YYYY-MM-DD H:mm:ss[Z]"
+                            }
+                        },
+                        "trains": [
+                            {
+                                "__repeat": true,
+                                "departureTime": {
+                                    "repeatedIn": [
+                                        "//table[contains(@class,\"product-details\")]",
+                                        ""
+                                    ],
+                                    "xpath": "//*[contains(@class,\"origin-destination-hour\")]"
+                                },
+                                "departureStation": {
+                                    "repeatedIn": [
+                                        "//table[contains(@class,\"product-details\")]",
+                                        ""
+                                    ],
+                                    "xpath": "//*[contains(@class,\"origin-destination-station\")]"
+                                },
+                                "arrivalTime": {
+                                    "repeatedIn": [
+                                        "//table[contains(@class,\"product-details\")]",
+                                        ""
+                                    ],
+                                    "xpath": "//*[contains(@class,\"origin-destination-border\")]"
+                                },
+                                "arrivalStation": {
+                                    "repeatedIn": [
+                                        "//table[contains(@class,\"product-details\")]",
+                                        ""
+                                    ],
+                                    "xpath": "//*[contains(@class,\"origin-destination-border\")]"
+                                },
+                                "type": {
+                                    "repeatedIn": [
+                                        "//table[contains(@class,\"product-details\")]",
+                                        ""
+                                    ],
+                                    "xpath": "//*[contains(@class,\"segment\")][1]"
+                                },
+                                "number": {
+                                    "repeatedIn": [
+                                        "//table[contains(@class,\"product-details\")]",
+                                        ""
+                                    ],
+                                    "xpath": "//*[contains(@class,\"segment\")][2]"
+                                },
+                                "__condition": {
+                                    "__rule": "repeat [4,1]",
+                                    "__name": "passengers",
+                                    "__content": [
+                                        {
+                                            "__repeat": true,
+                                            "type": {
+                                                "repeatedIn": [
+                                                    "//table[contains(@class,\"passengers\")]",
+                                                    "",
+                                                    "//tr[td[contains(@class,\"typology\")]]"
+                                                ],
+                                                "xpath": "//td[contains(@class,\"typology\")]",
+                                                "replace": [
+                                                    [
+                                                        "[\\d]e.passager",
+                                                        ""
+                                                    ]
+                                                ]
+                                            }
+                                        }
+                                    ]
+                                }
+                            }
+                        ]
+                    }
+                ]
+            }
+        }
+    ],
+    "custom": {
+        "prices": [
+            {
+                "__repeat": true,
+                "value": {
+                    "repeatedIn": [
+                        "(//*[contains(@class,\"product-header\")])"
+                    ],
+                    "xpath": "//td[last()]",
+                    "replace": [
+                        [
+                            "€",
+                            ""
+                        ]
+                    ]
+                }
+            }
+        ]
+    }
+}
