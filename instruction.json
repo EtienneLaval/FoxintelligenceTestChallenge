@@ -103,7 +103,7 @@
                                     "xpath": "//*[contains(@class,\"segment\")][2]"
                                 },
                                 "__condition": {
-                                    "__rule": "repeat [4,1]",
+                                    "__rule": ["repeat", "[4,1]"],
                                     "__name": "passengers",
                                     "__content": [
                                         {
